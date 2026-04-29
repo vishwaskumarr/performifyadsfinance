@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Finiance PFA — Agency Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f7f4ee;
+    --bg-elev: #fbf9f4;
+    --panel: #ffffff;
+    --panel-2: #f0ece3;
+    --border: #e3ddd0;
+    --border-strong: #d4cbb8;
+
+    --ink: #1a1815;
+    --ink-2: #4a4640;
+    --muted: #8a8378;
+
+    --accent: #2e6b8a;
+    --accent-soft: #cfdde6;
+    --ok: #4a7c59;
+    --ok-soft: #d8e5dc;
+    --warn: #b8842e;
+    --warn-soft: #f2e2c4;
+    --bad: #a8342a;
+    --bad-soft: #f0d2cd;
+
+    --shadow-sm: 0 1px 2px rgba(26,24,21,0.04);
+    --shadow-md: 0 1px 3px rgba(26,24,21,0.04), 0 4px 16px rgba(26,24,21,0.04);
+    --shadow-lg: 0 8px 32px rgba(26,24,21,0.08);
+
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 16px;
+
+    --serif: "Fraunces", Georgia, serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5}
+  body{
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(46,107,138,0.04) 0%, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(74,124,89,0.04) 0%, transparent 45%);
+    min-height:100vh;
+  }
+  a{color:var(--accent);text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+
+  input,select,textarea{
+    font-family:var(--sans);font-size:14px;color:var(--ink);
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--r-sm);
+    padding:9px 11px;outline:none;transition:border-color .15s, box-shadow .15s;
+    width:100%;
+  }
+  input:focus,select:focus,textarea:focus{
+    border-color:var(--ink);box-shadow:0 0 0 3px rgba(26,24,21,0.06);
+  }
+  input[type=number]{font-variant-numeric:tabular-nums}
+  input[type=date]{padding:8px 11px}
+
+  .num-display{font-family:var(--serif);font-feature-settings:"ss01","tnum";font-variant-numeric:tabular-nums lining-nums}
+
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:240px;flex-shrink:0;
+    padding:36px 20px 24px;
+    border-right:1px solid var(--border);
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+    background:var(--bg-elev);
+  }
+  .brand{
+    font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:-0.02em;
+    margin-bottom:6px;
+  }
+  .brand-sub{
+    font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;
+    margin-bottom:36px;padding-bottom:20px;border-bottom:1px solid var(--border);
+  }
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nav button{
+    display:flex;align-items:center;gap:12px;
+    padding:10px 12px;border-radius:var(--r-sm);
+    text-align:left;font-size:13.5px;width:100%;
+    color:var(--ink-2);font-weight:500;
+    transition:background .15s, color .15s;
+  }
+  .nav button:hover{background:rgba(0,0,0,0.03);color:var(--ink)}
+  .nav button.active{background:var(--ink);color:var(--bg-elev)}
+  .nav button.active .nav-num{color:var(--bg-elev);opacity:.5}
+  .nav-num{
+    font-family:var(--mono);font-size:10px;color:var(--muted);
+    margin-left:auto;letter-spacing:0.05em;
+  }
+
+  .main{flex:1;padding:48px 56px;max-width:1400px}
+
+  .page-eyebrow{
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:8px;
+  }
+  .page-title{
+    font-family:var(--serif);font-size:42px;font-weight:500;letter-spacing:-0.02em;
+    margin:0 0 6px;line-height:1.05;color:var(--ink);
+  }
+  .page-sub{color:var(--muted);margin:0 0 36px;font-size:14px}
+
+  .grid{display:grid;gap:16px}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-1{grid-template-columns:1fr}
+  @media (max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:900px){.grid-3,.grid-2{grid-template-columns:1fr}}
+
+  .card{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--r-md);padding:22px 24px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .stat-card{position:relative;overflow:hidden}
+  .stat-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:var(--ink);opacity:0;transition:opacity .2s;
+  }
+  .stat-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+  .stat-card:hover::before{opacity:1}
+
+  .card-label{
+    font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;
+    margin:0 0 14px;font-weight:600;
+  }
+  .card-value{
+    font-family:var(--serif);font-size:34px;font-weight:500;
+    margin:0;letter-spacing:-0.02em;line-height:1;
+    font-variant-numeric:tabular-nums lining-nums;
+  }
+  .card-value.med{font-size:24px}
+  .card-value.sm{font-size:20px}
+  .card-sub{color:var(--muted);font-size:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+  .card-sub-num{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+
+  .pos{color:var(--ok)}.neg{color:var(--bad)}.warn-c{color:var(--warn)}
+
+  .table-wrap{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--r-md);overflow:hidden;
+  }
+  .table-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 24px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;
+  }
+  .table-head h3{
+    margin:0;font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-0.01em;
+  }
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:12px 18px;text-align:left;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+  th{
+    color:var(--muted);font-weight:600;font-size:10.5px;text-transform:uppercase;
+    letter-spacing:0.12em;background:var(--bg-elev);padding-top:11px;padding-bottom:11px;
+  }
+  tr:last-child td{border-bottom:0}
+  tbody tr{transition:background .12s}
+  tbody tr:hover td{background:var(--bg-elev)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:12.5px}
+  th.num{font-family:var(--sans)}
+  tr.total-row td{
+    background:var(--panel-2)!important;font-weight:600;
+    font-family:var(--serif);font-size:14px;
+  }
+  tr.total-row td.num{font-family:var(--mono);font-size:13.5px}
+
+  .btn{
+    background:var(--ink);color:var(--bg-elev);
+    padding:10px 18px;border-radius:var(--r-sm);
+    font-weight:500;font-size:13px;letter-spacing:0.01em;
+    transition:transform .1s, opacity .15s;
+    white-space:nowrap;
+  }
+  .btn:hover{opacity:.88}
+  .btn:active{transform:scale(.98)}
+  .btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--border-strong)}
+  .btn.ghost:hover{background:var(--bg-elev);opacity:1}
+  .btn.danger{background:var(--panel);color:var(--bad);border:1px solid var(--bad-soft)}
+  .btn.danger:hover{background:var(--bad-soft);opacity:1}
+  .btn.accent{background:var(--accent)}
+  .btn.sm{padding:6px 12px;font-size:11.5px}
+
+  .badge{
+    display:inline-block;padding:3px 10px;border-radius:99px;
+    font-size:10.5px;font-weight:600;letter-spacing:0.04em;
+    background:var(--panel-2);color:var(--ink-2);
+    border:1px solid var(--border);
+  }
+  .badge.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+  .badge.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+  .badge.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+  .badge.info{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+
+  /* Category-specific tints */
+  .badge.cat-Development  {background:#dce9e3;color:#3d6e54;border-color:transparent}
+  .badge.cat-Software     {background:#d6e2ec;color:#365875;border-color:transparent}
+  .badge.cat-Marketing    {background:#ecd6e2;color:#7a3654;border-color:transparent}
+  .badge.cat-Operations   {background:#e8e2d3;color:#5c4f33;border-color:transparent}
+  .badge.cat-Salaries     {background:#dde2da;color:#41594a;border-color:transparent}
+  .badge.cat-Office       {background:#e3dde8;color:#564670;border-color:transparent}
+  .badge.cat-Taxes        {background:#f0d2cd;color:#a8342a;border-color:transparent}
+  .badge.cat-AdSpend      {background:#f2dac4;color:#8a5022;border-color:transparent}
+  .badge.cat-Miscellaneous{background:#dfdfd4;color:#555041;border-color:transparent}
+
+  .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:12px}
+  .form-row label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+
+  .modal-bg{
+    position:fixed;inset:0;background:rgba(26,24,21,0.5);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  }
+  .modal-bg.show{display:flex;animation:fadeIn .2s ease}
+  .modal{
+    background:var(--panel);border-radius:var(--r-lg);
+    padding:32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;
+    box-shadow:var(--shadow-lg);
+    animation:slideUp .25s cubic-bezier(.2,.8,.2,1);
+  }
+  .modal h3{
+    margin:0 0 20px;font-family:var(--serif);font-size:24px;font-weight:500;
+    letter-spacing:-0.02em;
+  }
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .tabs{display:flex;gap:4px;margin-bottom:20px;overflow-x:auto;padding:4px;background:var(--panel-2);border-radius:var(--r-sm);width:fit-content;max-width:100%}
+  .tabs button{
+    padding:7px 14px;border-radius:6px;
+    font-size:12.5px;font-weight:500;color:var(--ink-2);
+    white-space:nowrap;transition:background .15s, color .15s;
+  }
+  .tabs button:hover{color:var(--ink)}
+  .tabs button.active{background:var(--panel);color:var(--ink);box-shadow:var(--shadow-sm);font-weight:600}
+
+  .filter-bar{
+    display:flex;gap:10px;align-items:center;
+    padding:14px 24px;border-bottom:1px solid var(--border);
+    background:var(--bg-elev);flex-wrap:wrap;
+  }
+  .filter-bar select, .filter-bar input{
+    width:auto;padding:6px 10px;font-size:12.5px;
+    background:var(--panel);
+  }
+  .filter-bar input[type=search]{min-width:200px;flex:1;max-width:300px}
+
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .spacer{flex:1}
+  .actions{display:flex;gap:6px;justify-content:flex-end}
+  .empty{padding:48px 20px;text-align:center;color:var(--muted);font-style:italic;font-family:var(--serif);font-size:15px}
+
+  .progress{height:4px;background:var(--panel-2);border-radius:99px;overflow:hidden;margin-top:10px}
+  .progress > div{height:100%;background:var(--ink);transition:width .4s ease}
+  .progress.warn > div{background:var(--warn)}
+  .progress.bad > div{background:var(--bad)}
+
+  .section-head{
+    display:flex;align-items:baseline;gap:14px;
+    margin:32px 0 16px;
+  }
+  .section-head h2{
+    font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-0.01em;margin:0;
+  }
+  .section-head .section-rule{flex:1;height:1px;background:var(--border)}
+  .section-head .section-num{
+    font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.05em;
+  }
+
+  .divider-dot{
+    display:inline-block;width:3px;height:3px;border-radius:50%;
+    background:var(--muted);margin:0 8px;vertical-align:middle;opacity:.5;
+  }
+
+  .pill{
+    display:inline-block;padding:1px 8px;border-radius:99px;
+    font-size:10px;font-weight:600;letter-spacing:0.04em;
+    background:var(--panel-2);color:var(--muted);
+  }
+  .pill.recurring{background:var(--accent-soft);color:var(--accent)}
+
+  /* Bar chart for history */
+  .bar-chart{
+    display:flex;align-items:flex-end;gap:18px;
+    height:240px;padding:0 8px 8px;overflow-x:auto;
+  }
+  .bar-group{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:64px;height:100%}
+  .bar-stack{display:flex;gap:4px;align-items:flex-end;width:100%;height:170px}
+  .bar-track{
+    flex:1;height:100%;display:flex;align-items:flex-end;
+    background:repeating-linear-gradient(0deg, transparent, transparent 28px, var(--border) 28px, var(--border) 29px);
+    border-radius:3px 3px 0 0;
+  }
+  .bar{width:100%;border-radius:3px 3px 0 0;transition:height .6s cubic-bezier(.2,.8,.2,1);min-height:2px}
+  .bar-inc{background:linear-gradient(180deg, var(--ok), #5e9670)}
+  .bar-exp{background:linear-gradient(180deg, var(--ink), #2a2620)}
+  .bar-label{font-size:11px;color:var(--ink-2);font-weight:600;text-align:center;line-height:1.3}
+  .bar-year{color:var(--muted);font-weight:400;font-size:10px;font-family:var(--mono)}
+  .bar-net{font-family:var(--mono);font-size:10.5px;font-weight:600;margin-top:2px;letter-spacing:-0.02em}
+  .chart-legend{
+    display:flex;gap:24px;justify-content:center;margin-top:20px;
+    padding-top:18px;border-top:1px solid var(--border);
+    font-size:12px;color:var(--ink-2);
+  }
+  .chart-legend span{display:inline-flex;align-items:center;gap:8px}
+  .legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px}
+
+  @media (max-width:768px){
+    .app{flex-direction:column}
+    .sidebar{width:100%;height:auto;position:static;padding:16px 20px}
+    .brand-sub{display:none}
+    .nav{flex-direction:row;overflow-x:auto;gap:4px}
+    .nav button{padding:8px 12px;font-size:12px;flex-shrink:0}
+    .nav-num{display:none}
+    .main{padding:24px 20px}
+    .page-title{font-size:32px}
+    .card{padding:18px 20px}
+    .card-value{font-size:26px}
+    th,td{padding:10px 12px}
+    th.num,td.num{font-size:11.5px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">Finiance PFA</div>
+    <div class="brand-sub">Agency Books</div>
+    <nav class="nav" id="nav">
+      <button data-page="dashboard" class="active">Overview <span class="nav-num">01</span></button>
+      <button data-page="expenses">Expenses <span class="nav-num">02</span></button>
+      <button data-page="income">Income <span class="nav-num">03</span></button>
+      <button data-page="recurring">Recurring <span class="nav-num">04</span></button>
+      <button data-page="reimbursements">Reimbursements <span class="nav-num">05</span></button>
+      <button data-page="history">History <span class="nav-num">06</span></button>
+      <button data-page="settings">Settings <span class="nav-num">07</span></button>
+    </nav>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+
+<script>
+function cryptoId(){ return "id_"+Math.random().toString(36).slice(2,10); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+const CATEGORIES = ["Development","Software / Tools","Marketing","Operations","Salaries","Office","Taxes","Ad Spend","Miscellaneous"];
+const PAYMENT_METHODS = ["UPI","Cash","Debit Card","Credit Card","Bank Transfer","Cheque"];
+const RECURRENCE = ["One-time","Monthly","Quarterly","Yearly"];
+const STATUSES = ["Settled","Pending"];
+
+const DEFAULT_DATA = {
+  currency: "₹",
+  people: ["Vishwas","Gracy"],
+  clients: [],
+  expenses: [],
+  income: []
+};
+
+const STORE_KEY = "finiancePfaData_v1";
+let state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ console.warn("Load failed",e); }
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+
+function fmt(n){
+  if(n===null||n===undefined||isNaN(n)) return "—";
+  const sign = n<0 ? "−" : "";
+  return sign + state.currency + Math.abs(Math.round(n)).toLocaleString("en-IN");
+}
+function fmtDate(iso){
+  if(!iso) return "—";
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+}
+function monthKeyFromISO(iso){ return iso ? iso.slice(0,7) : ""; }
+function currentMonthKey(){
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+}
+function monthLabel(key){
+  if(!key) return "";
+  const [y,m] = key.split("-").map(Number);
+  return new Date(y, m-1, 1).toLocaleString("en-US",{month:"long",year:"numeric"});
+}
+function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function catClass(cat){ return "cat-" + (cat||"").replace(/[\s\/]/g,"").replace(/&/g,""); }
+
+const pages = {
+  dashboard: renderDashboard,
+  expenses: renderExpenses,
+  income: renderIncome,
+  recurring: renderRecurring,
+  reimbursements: renderReimbursements,
+  history: renderHistory,
+  settings: renderSettings
+};
+let currentPage = "dashboard";
+let viewMonth = currentMonthKey();
+let expenseFilters = { category:"", paidBy:"", method:"", search:"" };
+
+document.getElementById("nav").addEventListener("click", e => {
+  const btn = e.target.closest("button"); if(!btn) return;
+  document.querySelectorAll("#nav button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentPage = btn.dataset.page;
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+function render(){ pages[currentPage](); }
+
+const modalBg = document.getElementById("modalBg");
+const modal = document.getElementById("modal");
+modalBg.addEventListener("click", e => { if(e.target===modalBg) closeModal(); });
+function openModal(html){ modal.innerHTML = html; modalBg.classList.add("show"); }
+function closeModal(){ modalBg.classList.remove("show"); }
+
+function getMonthExpenses(key){ return state.expenses.filter(e => monthKeyFromISO(e.date) === key); }
+function getMonthIncome(key){ return state.income.filter(i => monthKeyFromISO(i.date) === key); }
+
+function getAllMonthKeys(){
+  const keys = new Set();
+  state.expenses.forEach(e => { if(e.date) keys.add(monthKeyFromISO(e.date)); });
+  state.income.forEach(i => { if(i.date) keys.add(monthKeyFromISO(i.date)); });
+  keys.add(currentMonthKey());
+  return [...keys].sort();
+}
+
+// =====================================================
+// DASHBOARD
+// =====================================================
+function renderDashboard(){
+  const main = document.getElementById("main");
+  const monthExp = getMonthExpenses(viewMonth);
+  const monthInc = getMonthIncome(viewMonth);
+
+  const totalExp = monthExp.reduce((s,e)=>s+(+e.amount||0),0);
+  const totalInc = monthInc.reduce((s,i)=>s+(+i.amount||0),0);
+  const profit = totalInc - totalExp;
+
+  // Pending reimbursements
+  let pendingReimb = 0;
+  const reimbByPerson = {};
+  monthExp.filter(e => e.status === "Pending").forEach(e => {
+    pendingReimb += +e.amount || 0;
+    reimbByPerson[e.paidBy] = (reimbByPerson[e.paidBy]||0) + (+e.amount||0);
+  });
+
+  // Recurring total
+  const recurringMonthly = state.expenses
+    .filter(e => e.recurrence === "Monthly")
+    .reduce((map, e) => {
+      // Only count the latest entry per vendor+subCategory to estimate locked-in monthly cost
+      const k = (e.vendor||"") + "|" + (e.subCategory||"");
+      if(!map[k] || (e.date||"") > (map[k].date||"")) map[k] = e;
+      return map;
+    }, {});
+  const recurringTotal = Object.values(recurringMonthly).reduce((s,e)=>s+(+e.amount||0),0);
+
+  // Category breakdown
+  const byCat = {};
+  monthExp.forEach(e => {
+    byCat[e.category] = (byCat[e.category]||0) + (+e.amount||0);
+  });
+
+  // Recent expenses (last 5)
+  const recent = monthExp.slice().sort((a,b) => (b.date||"").localeCompare(a.date||"")).slice(0,5);
+
+  const allMonths = getAllMonthKeys();
+
+  main.innerHTML = `
+    <div class="page-eyebrow">${monthLabel(viewMonth)}</div>
+    <h1 class="page-title">Overview</h1>
+    <p class="page-sub">Agency cashflow at a glance</p>
+
+    <div class="tabs">
+      ${allMonths.slice(-12).map(k => `<button class="${k===viewMonth?'active':''}" data-month="${k}">${monthLabel(k)}</button>`).join("")}
+    </div>
+
+    <div class="grid grid-4" style="margin-bottom:24px">
+      <div class="card stat-card">
+        <p class="card-label">Income</p>
+        <p class="card-value ${totalInc>0?'pos':''}">${fmt(totalInc)}</p>
+        <div class="card-sub"><span>${monthInc.length} entries</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Expenses</p>
+        <p class="card-value">${fmt(totalExp)}</p>
+        <div class="card-sub"><span>${monthExp.length} entries</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Profit</p>
+        <p class="card-value ${profit>0?'pos':profit<0?'neg':''}">${fmt(profit)}</p>
+        <div class="card-sub">
+          <span>Margin</span>
+          <span class="card-sub-num">${totalInc>0?((profit/totalInc)*100).toFixed(1):'0.0'}%</span>
+        </div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Pending Reimburse</p>
+        <p class="card-value ${pendingReimb>0?'warn-c':''}">${fmt(pendingReimb)}</p>
+        <div class="card-sub"><span>${Object.keys(reimbByPerson).length} ${Object.keys(reimbByPerson).length===1?'person':'people'}</span></div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Recent Expenses</h2>
+      <span class="section-rule"></span>
+      <button class="btn sm" onclick="openExpenseModal()">+ Add Expense</button>
+    </div>
+    <div class="table-wrap" style="margin-bottom:32px">
+      ${recent.length === 0 ? `<div class="empty">No expenses yet for ${monthLabel(viewMonth)}.</div>` : `
+      <table><thead><tr>
+        <th>Date</th><th>Vendor</th><th>Category</th><th>Paid By</th><th class="num">Amount</th><th></th>
+      </tr></thead><tbody>${recent.map(e => `
+        <tr>
+          <td>${fmtDate(e.date)}</td>
+          <td>${escapeHtml(e.vendor)} ${e.recurrence!=='One-time'?`<span class="pill recurring">${e.recurrence}</span>`:''}</td>
+          <td><span class="badge ${catClass(e.category)}">${escapeHtml(e.category)}</span></td>
+          <td>${escapeHtml(e.paidBy)} ${e.status==='Pending'?`<span class="badge warn" style="margin-left:4px">Pending</span>`:''}</td>
+          <td class="num">${fmt(e.amount)}</td>
+          <td class="actions"><button class="btn sm ghost" onclick="editExpense('${e.id}')">Edit</button></td>
+        </tr>`).join("")}</tbody></table>`}
+    </div>
+
+    <div class="section-head">
+      <h2>By Category</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${Object.keys(byCat).length} groups</span>
+    </div>
+    <div class="grid grid-4" style="margin-bottom:32px">
+      ${CATEGORIES.map(cat => {
+        const v = byCat[cat] || 0;
+        const pct = totalExp>0 ? (v/totalExp)*100 : 0;
+        const isEmpty = v === 0;
+        return `<div class="card">
+          <p class="card-label">${cat}</p>
+          <p class="card-value sm ${isEmpty?'':''}" ${isEmpty?'style="color:var(--muted);font-weight:400"':''}>${fmt(v)}</p>
+          <div class="progress"><div style="width:${pct}%"></div></div>
+          <div class="card-sub">
+            ${isEmpty
+              ? `<button class="btn sm ghost" style="padding:3px 8px;font-size:10.5px" onclick="openExpenseModal(null,'${cat}')">+ Add</button>`
+              : `<span>${pct.toFixed(0)}% of total</span>`
+            }
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+
+    <div class="section-head">
+      <h2>Recurring · Locked-in Monthly</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${fmt(recurringTotal)} / month</span>
+    </div>
+    <div class="card">
+      <p style="color:var(--ink-2);font-size:13.5px;margin:0 0 8px">
+        These are your regular monthly expenses based on items marked Monthly. Click "Recurring" in the sidebar for full breakdown.
+      </p>
+      <p style="margin:0;color:var(--muted);font-size:12.5px">
+        ${Object.keys(recurringMonthly).length} recurring items
+      </p>
+    </div>
+  `;
+
+  main.querySelectorAll("[data-month]").forEach(b => {
+    b.addEventListener("click", () => { viewMonth = b.dataset.month; render(); });
+  });
+}
+
+// =====================================================
+// EXPENSES
+// =====================================================
+function renderExpenses(){
+  const main = document.getElementById("main");
+
+  // Apply filters
+  let filtered = state.expenses.slice();
+  if(expenseFilters.category) filtered = filtered.filter(e => e.category === expenseFilters.category);
+  if(expenseFilters.paidBy) filtered = filtered.filter(e => e.paidBy === expenseFilters.paidBy);
+  if(expenseFilters.method) filtered = filtered.filter(e => e.method === expenseFilters.method);
+  if(expenseFilters.search){
+    const q = expenseFilters.search.toLowerCase();
+    filtered = filtered.filter(e =>
+      (e.vendor||"").toLowerCase().includes(q) ||
+      (e.subCategory||"").toLowerCase().includes(q) ||
+      (e.category||"").toLowerCase().includes(q)
+    );
+  }
+
+  filtered.sort((a,b) => (b.date||"").localeCompare(a.date||""));
+
+  const total = filtered.reduce((s,e)=>s+(+e.amount||0),0);
+
+  main.innerHTML = `
+    <div class="page-eyebrow">Outgoing</div>
+    <div class="row" style="margin-bottom:6px">
+      <h1 class="page-title">Expenses</h1>
+      <span class="spacer"></span>
+      <button class="btn ghost" onclick="exportExpensesCsv()">Export CSV</button>
+      <button class="btn" onclick="openExpenseModal()">+ Add Expense</button>
+    </div>
+    <p class="page-sub">${filtered.length} entries · Total ${fmt(total)}</p>
+
+    <div class="table-wrap">
+      <div class="filter-bar">
+        <input type="search" id="exFilter_search" placeholder="Search vendor, sub-category…" value="${escapeHtml(expenseFilters.search)}" />
+        <select id="exFilter_cat">
+          <option value="">All categories</option>
+          ${CATEGORIES.map(c => `<option ${expenseFilters.category===c?'selected':''}>${c}</option>`).join("")}
+        </select>
+        <select id="exFilter_paid">
+          <option value="">All paid by</option>
+          ${state.people.map(p => `<option ${expenseFilters.paidBy===p?'selected':''}>${p}</option>`).join("")}
+        </select>
+        <select id="exFilter_method">
+          <option value="">All methods</option>
+          ${PAYMENT_METHODS.map(m => `<option ${expenseFilters.method===m?'selected':''}>${m}</option>`).join("")}
+        </select>
+        ${(expenseFilters.category||expenseFilters.paidBy||expenseFilters.method||expenseFilters.search) ? `<button class="btn sm ghost" onclick="clearExpenseFilters()">Clear</button>` : ''}
+      </div>
+      ${filtered.length === 0 ? `<div class="empty">No expenses match your filters.</div>` : `
+      <table><thead><tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Sub-Category</th>
+        <th>Vendor</th>
+        <th>Method</th>
+        <th>Paid By</th>
+        <th>Status</th>
+        <th class="num">Amount</th>
+        <th></th>
+      </tr></thead><tbody>${filtered.map(e => `
+        <tr>
+          <td>${fmtDate(e.date)}</td>
+          <td><span class="badge ${catClass(e.category)}">${escapeHtml(e.category)}</span></td>
+          <td>${escapeHtml(e.subCategory)} ${e.recurrence!=='One-time'?`<span class="pill recurring">${e.recurrence}</span>`:''}</td>
+          <td>${escapeHtml(e.vendor)}</td>
+          <td><span class="badge">${escapeHtml(e.method)}</span></td>
+          <td>${escapeHtml(e.paidBy)}</td>
+          <td><span class="badge ${e.status==='Settled'?'ok':'warn'}">${e.status}</span></td>
+          <td class="num">${fmt(e.amount)}</td>
+          <td class="actions">
+            <button class="btn sm ghost" onclick="editExpense('${e.id}')">Edit</button>
+            <button class="btn sm danger" onclick="deleteExpense('${e.id}')">Delete</button>
+          </td>
+        </tr>`).join("")}
+        <tr class="total-row">
+          <td colspan="7">Total</td>
+          <td class="num">${fmt(total)}</td>
+          <td></td>
+        </tr>
+      </tbody></table>`}
+    </div>
+  `;
+
+  // Wire up filter controls
+  const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+  document.getElementById("exFilter_search").addEventListener("input", debounce(e => {
+    expenseFilters.search = e.target.value; render();
+  }, 250));
+  document.getElementById("exFilter_cat").addEventListener("change", e => { expenseFilters.category = e.target.value; render(); });
+  document.getElementById("exFilter_paid").addEventListener("change", e => { expenseFilters.paidBy = e.target.value; render(); });
+  document.getElementById("exFilter_method").addEventListener("change", e => { expenseFilters.method = e.target.value; render(); });
+}
+
+window.clearExpenseFilters = function(){
+  expenseFilters = { category:"", paidBy:"", method:"", search:"" };
+  render();
+};
+
+window.openExpenseModal = function(_ignored, preselectedCat){
+  const sel = preselectedCat || "Software / Tools";
+  openModal(`<h3>Add Expense</h3>
+    <div class="form-row">
+      <label>Date<input id="ex_date" type="date" value="${todayISO()}" /></label>
+      <label>Amount (${state.currency})<input id="ex_amount" type="number" step="0.01" value="0" /></label>
+    </div>
+    <div class="form-row">
+      <label>Category
+        <select id="ex_category">
+          ${CATEGORIES.map(c => `<option ${c===sel?'selected':''}>${c}</option>`).join("")}
+        </select>
+      </label>
+      <label>Sub-Category<input id="ex_subcat" placeholder="e.g. Hosting, Canva" /></label>
+    </div>
+    <div class="form-row">
+      <label>Vendor / Tool<input id="ex_vendor" placeholder="e.g. Hostinger, Adobe" /></label>
+      <label>Payment Method
+        <select id="ex_method">
+          ${PAYMENT_METHODS.map(m => `<option>${m}</option>`).join("")}
+        </select>
+      </label>
+    </div>
+    <div class="form-row">
+      <label>Recurring
+        <select id="ex_recurrence">
+          ${RECURRENCE.map(r => `<option>${r}</option>`).join("")}
+        </select>
+      </label>
+      <label>Paid By
+        <select id="ex_paidby">
+          ${state.people.map(p => `<option>${p}</option>`).join("")}
+        </select>
+      </label>
+      <label>Status
+        <select id="ex_status">
+          ${STATUSES.map(s => `<option ${s==='Settled'?'selected':''}>${s}</option>`).join("")}
+        </select>
+      </label>
+    </div>
+    <div class="row" style="margin-top:24px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="saveExpense()">Save</button>
+    </div>`);
+};
+
+window.saveExpense = function(){
+  const item = {
+    id: cryptoId(),
+    date: document.getElementById("ex_date").value || todayISO(),
+    amount: +document.getElementById("ex_amount").value || 0,
+    category: document.getElementById("ex_category").value,
+    subCategory: document.getElementById("ex_subcat").value || "",
+    vendor: document.getElementById("ex_vendor").value || "Unknown",
+    method: document.getElementById("ex_method").value,
+    recurrence: document.getElementById("ex_recurrence").value,
+    paidBy: document.getElementById("ex_paidby").value,
+    status: document.getElementById("ex_status").value
+  };
+  state.expenses.push(item);
+  saveState(); closeModal(); render();
+};
+
+window.editExpense = function(id){
+  const e = state.expenses.find(x => x.id === id); if(!e) return;
+  openModal(`<h3>Edit Expense</h3>
+    <div class="form-row">
+      <label>Date<input id="ex_date" type="date" value="${e.date}" /></label>
+      <label>Amount<input id="ex_amount" type="number" step="0.01" value="${e.amount}" /></label>
+    </div>
+    <div class="form-row">
+      <label>Category
+        <select id="ex_category">
+          ${CATEGORIES.map(c => `<option ${e.category===c?'selected':''}>${c}</option>`).join("")}
+        </select>
+      </label>
+      <label>Sub-Category<input id="ex_subcat" value="${escapeHtml(e.subCategory||'')}" /></label>
+    </div>
+    <div class="form-row">
+      <label>Vendor<input id="ex_vendor" value="${escapeHtml(e.vendor||'')}" /></label>
+      <label>Method
+        <select id="ex_method">
+          ${PAYMENT_METHODS.map(m => `<option ${e.method===m?'selected':''}>${m}</option>`).join("")}
+        </select>
+      </label>
+    </div>
+    <div class="form-row">
+      <label>Recurring
+        <select id="ex_recurrence">
+          ${RECURRENCE.map(r => `<option ${e.recurrence===r?'selected':''}>${r}</option>`).join("")}
+        </select>
+      </label>
+      <label>Paid By
+        <select id="ex_paidby">
+          ${state.people.map(p => `<option ${e.paidBy===p?'selected':''}>${p}</option>`).join("")}
+        </select>
+      </label>
+      <label>Status
+        <select id="ex_status">
+          ${STATUSES.map(s => `<option ${e.status===s?'selected':''}>${s}</option>`).join("")}
+        </select>
+      </label>
+    </div>
+    <div class="row" style="margin-top:24px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="updateExpense('${id}')">Save</button>
+    </div>`);
+};
+
+window.updateExpense = function(id){
+  const e = state.expenses.find(x => x.id === id); if(!e) return;
+  e.date = document.getElementById("ex_date").value;
+  e.amount = +document.getElementById("ex_amount").value || 0;
+  e.category = document.getElementById("ex_category").value;
+  e.subCategory = document.getElementById("ex_subcat").value;
+  e.vendor = document.getElementById("ex_vendor").value;
+  e.method = document.getElementById("ex_method").value;
+  e.recurrence = document.getElementById("ex_recurrence").value;
+  e.paidBy = document.getElementById("ex_paidby").value;
+  e.status = document.getElementById("ex_status").value;
+  saveState(); closeModal(); render();
+};
+
+window.deleteExpense = function(id){
+  if(!confirm("Delete this expense?")) return;
+  state.expenses = state.expenses.filter(x => x.id !== id);
+  saveState(); render();
+};
+
+window.exportExpensesCsv = function(){
+  const rows = [["Date","Amount","Category","Sub-Category","Vendor","Method","Recurring","Paid By","Status"]];
+  state.expenses.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(e => {
+    rows.push([e.date,e.amount,e.category,e.subCategory||"",e.vendor||"",e.method||"",e.recurrence||"",e.paidBy||"",e.status||""]);
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type:"text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `expenses-${todayISO()}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+};
+
+// =====================================================
+// INCOME
+// =====================================================
+function renderIncome(){
+  const main = document.getElementById("main");
+  const items = state.income.slice().sort((a,b) => (b.date||"").localeCompare(a.date||""));
+  const total = items.reduce((s,i)=>s+(+i.amount||0),0);
+  const pending = items.filter(i => i.status === "Pending").reduce((s,i)=>s+(+i.amount||0),0);
+  const received = total - pending;
+
+  // Group by client for summary
+  const byClient = {};
+  items.forEach(i => {
+    const k = i.client || "Unknown";
+    byClient[k] = byClient[k] || { count:0, total:0, received:0 };
+    byClient[k].count++;
+    byClient[k].total += +i.amount||0;
+    if(i.status==="Received") byClient[k].received += +i.amount||0;
+  });
+
+  main.innerHTML = `
+    <div class="page-eyebrow">Revenue</div>
+    <div class="row" style="margin-bottom:6px">
+      <h1 class="page-title">Income</h1>
+      <span class="spacer"></span>
+      <button class="btn" onclick="openIncomeModal()">+ Add Invoice</button>
+    </div>
+    <p class="page-sub">${items.length} entries · ${Object.keys(byClient).length} clients</p>
+
+    <div class="grid grid-3" style="margin-bottom:24px">
+      <div class="card stat-card">
+        <p class="card-label">Total Invoiced</p>
+        <p class="card-value med">${fmt(total)}</p>
+        <div class="card-sub"><span>All-time</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Received</p>
+        <p class="card-value med ${received>0?'pos':''}">${fmt(received)}</p>
+        <div class="card-sub"><span>Cleared payments</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Pending</p>
+        <p class="card-value med ${pending>0?'warn-c':''}">${fmt(pending)}</p>
+        <div class="card-sub"><span>Awaiting payment</span></div>
+      </div>
+    </div>
+
+    ${Object.keys(byClient).length > 0 ? `
+    <div class="section-head">
+      <h2>By Client</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${Object.keys(byClient).length} clients</span>
+    </div>
+    <div class="grid grid-3" style="margin-bottom:32px">
+      ${Object.entries(byClient).map(([client,v]) => `
+        <div class="card">
+          <p class="card-label">${escapeHtml(client)}</p>
+          <p class="card-value sm">${fmt(v.total)}</p>
+          <div class="card-sub">
+            <span>${v.count} invoice${v.count===1?'':'s'}</span>
+            <span class="card-sub-num pos">${fmt(v.received)} received</span>
+          </div>
+        </div>
+      `).join("")}
+    </div>` : ''}
+
+    <div class="section-head">
+      <h2>All Invoices</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${items.length} entries</span>
+    </div>
+    <div class="table-wrap">
+      ${items.length === 0 ? `<div class="empty">No income entries yet. Click "+ Add Invoice" to start.</div>` : `
+      <table><thead><tr>
+        <th>Date</th><th>Client</th><th>Type</th><th>Description</th><th>Status</th><th class="num">Amount</th><th></th>
+      </tr></thead><tbody>${items.map(i => `
+        <tr>
+          <td>${fmtDate(i.date)}</td>
+          <td><strong style="font-weight:600">${escapeHtml(i.client||'—')}</strong></td>
+          <td><span class="badge">${escapeHtml(i.type||'Project')}</span></td>
+          <td>${escapeHtml(i.description||'—')}</td>
+          <td><span class="badge ${i.status==='Received'?'ok':'warn'}">${i.status}</span></td>
+          <td class="num">${fmt(i.amount)}</td>
+          <td class="actions">
+            <button class="btn sm ghost" onclick="editIncome('${i.id}')">Edit</button>
+            <button class="btn sm danger" onclick="deleteIncome('${i.id}')">Delete</button>
+          </td>
+        </tr>`).join("")}
+        <tr class="total-row">
+          <td colspan="5">Total</td>
+          <td class="num">${fmt(total)}</td>
+          <td></td>
+        </tr>
+      </tbody></table>`}
+    </div>
+  `;
+}
+
+window.openIncomeModal = function(){
+  openModal(`<h3>Add Invoice / Income</h3>
+    <div class="form-row">
+      <label>Date<input id="in_date" type="date" value="${todayISO()}" /></label>
+      <label>Amount (${state.currency})<input id="in_amount" type="number" step="0.01" value="0" /></label>
+    </div>
+    <div class="form-row">
+      <label>Client<input id="in_client" placeholder="Client name" /></label>
+      <label>Type
+        <select id="in_type">
+          <option>Project</option>
+          <option>Retainer</option>
+          <option>Hourly</option>
+          <option>Other</option>
+        </select>
+      </label>
+    </div>
+    <div class="form-row">
+      <label>Description<input id="in_description" placeholder="e.g. Website redesign Phase 1" /></label>
+      <label>Status
+        <select id="in_status">
+          <option>Pending</option>
+          <option>Received</option>
+        </select>
+      </label>
+    </div>
+    <div class="row" style="margin-top:24px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="saveIncome()">Save</button>
+    </div>`);
+};
+
+window.saveIncome = function(){
+  const item = {
+    id: cryptoId(),
+    date: document.getElementById("in_date").value || todayISO(),
+    amount: +document.getElementById("in_amount").value || 0,
+    client: document.getElementById("in_client").value || "Unknown",
+    type: document.getElementById("in_type").value,
+    description: document.getElementById("in_description").value || "",
+    status: document.getElementById("in_status").value
+  };
+  state.income.push(item);
+  saveState(); closeModal(); render();
+};
+
+window.editIncome = function(id){
+  const i = state.income.find(x => x.id === id); if(!i) return;
+  openModal(`<h3>Edit Invoice</h3>
+    <div class="form-row">
+      <label>Date<input id="in_date" type="date" value="${i.date}" /></label>
+      <label>Amount<input id="in_amount" type="number" step="0.01" value="${i.amount}" /></label>
+    </div>
+    <div class="form-row">
+      <label>Client<input id="in_client" value="${escapeHtml(i.client||'')}" /></label>
+      <label>Type
+        <select id="in_type">
+          ${["Project","Retainer","Hourly","Other"].map(t => `<option ${i.type===t?'selected':''}>${t}</option>`).join("")}
+        </select>
+      </label>
+    </div>
+    <div class="form-row">
+      <label>Description<input id="in_description" value="${escapeHtml(i.description||'')}" /></label>
+      <label>Status
+        <select id="in_status">
+          ${["Pending","Received"].map(s => `<option ${i.status===s?'selected':''}>${s}</option>`).join("")}
+        </select>
+      </label>
+    </div>
+    <div class="row" style="margin-top:24px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="updateIncome('${id}')">Save</button>
+    </div>`);
+};
+
+window.updateIncome = function(id){
+  const i = state.income.find(x => x.id === id); if(!i) return;
+  i.date = document.getElementById("in_date").value;
+  i.amount = +document.getElementById("in_amount").value || 0;
+  i.client = document.getElementById("in_client").value;
+  i.type = document.getElementById("in_type").value;
+  i.description = document.getElementById("in_description").value;
+  i.status = document.getElementById("in_status").value;
+  saveState(); closeModal(); render();
+};
+
+window.deleteIncome = function(id){
+  if(!confirm("Delete this invoice?")) return;
+  state.income = state.income.filter(x => x.id !== id);
+  saveState(); render();
+};
+
+// =====================================================
+// RECURRING
+// =====================================================
+function renderRecurring(){
+  const main = document.getElementById("main");
+
+  // Group recurring expenses by vendor + subCategory, take latest amount
+  const byKey = {};
+  state.expenses.filter(e => e.recurrence !== "One-time").forEach(e => {
+    const k = (e.vendor||"") + "|" + (e.subCategory||"");
+    if(!byKey[k] || (e.date||"") > (byKey[k].date||"")) byKey[k] = e;
+  });
+  const items = Object.values(byKey);
+
+  const monthly = items.filter(e => e.recurrence === "Monthly");
+  const yearly = items.filter(e => e.recurrence === "Yearly");
+  const quarterly = items.filter(e => e.recurrence === "Quarterly");
+
+  const monthlyTotal = monthly.reduce((s,e)=>s+(+e.amount||0),0);
+  const quarterlyTotal = quarterly.reduce((s,e)=>s+(+e.amount||0),0);
+  const yearlyTotal = yearly.reduce((s,e)=>s+(+e.amount||0),0);
+
+  // Annualized totals
+  const annualizedTotal = (monthlyTotal*12) + (quarterlyTotal*4) + yearlyTotal;
+
+  const renderList = (list, recurType) => list.length === 0 ? `<div class="empty">No ${recurType.toLowerCase()} recurring items.</div>` : `
+    <table><thead><tr>
+      <th>Vendor</th><th>Sub-Category</th><th>Category</th><th>Last Charged</th><th class="num">Amount</th><th></th>
+    </tr></thead><tbody>${list.sort((a,b)=>(+b.amount||0)-(+a.amount||0)).map(e => `
+      <tr>
+        <td><strong style="font-weight:600">${escapeHtml(e.vendor)}</strong></td>
+        <td>${escapeHtml(e.subCategory||'—')}</td>
+        <td><span class="badge ${catClass(e.category)}">${escapeHtml(e.category)}</span></td>
+        <td>${fmtDate(e.date)}</td>
+        <td class="num">${fmt(e.amount)}</td>
+        <td class="actions"><button class="btn sm ghost" onclick="editExpense('${e.id}')">Edit</button></td>
+      </tr>`).join("")}
+      <tr class="total-row">
+        <td colspan="4">${recurType} Total</td>
+        <td class="num">${fmt(list.reduce((s,e)=>s+(+e.amount||0),0))}</td>
+        <td></td>
+      </tr>
+    </tbody></table>`;
+
+  main.innerHTML = `
+    <div class="page-eyebrow">Locked-in Costs</div>
+    <h1 class="page-title">Recurring</h1>
+    <p class="page-sub">Your fixed agency overhead — what you pay every month, quarter, and year</p>
+
+    <div class="grid grid-4" style="margin-bottom:32px">
+      <div class="card stat-card">
+        <p class="card-label">Monthly</p>
+        <p class="card-value med">${fmt(monthlyTotal)}</p>
+        <div class="card-sub"><span>${monthly.length} items</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Quarterly</p>
+        <p class="card-value med">${fmt(quarterlyTotal)}</p>
+        <div class="card-sub"><span>${quarterly.length} items</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Yearly</p>
+        <p class="card-value med">${fmt(yearlyTotal)}</p>
+        <div class="card-sub"><span>${yearly.length} items</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Annualized Total</p>
+        <p class="card-value med warn-c">${fmt(annualizedTotal)}</p>
+        <div class="card-sub"><span>Per year</span></div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Monthly</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${monthly.length} items · ${fmt(monthlyTotal)}/mo</span>
+    </div>
+    <div class="table-wrap" style="margin-bottom:24px">${renderList(monthly,"Monthly")}</div>
+
+    ${quarterly.length > 0 ? `
+    <div class="section-head">
+      <h2>Quarterly</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${quarterly.length} items</span>
+    </div>
+    <div class="table-wrap" style="margin-bottom:24px">${renderList(quarterly,"Quarterly")}</div>` : ''}
+
+    ${yearly.length > 0 ? `
+    <div class="section-head">
+      <h2>Yearly</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">${yearly.length} items</span>
+    </div>
+    <div class="table-wrap">${renderList(yearly,"Yearly")}</div>` : ''}
+
+    <p style="color:var(--muted);font-size:12.5px;margin-top:24px">
+      To mark an expense as recurring, edit it and change the "Recurring" field from "One-time".
+    </p>
+  `;
+}
+
+// =====================================================
+// REIMBURSEMENTS
+// =====================================================
+function renderReimbursements(){
+  const main = document.getElementById("main");
+
+  const pending = state.expenses.filter(e => e.status === "Pending");
+  const settled = state.expenses.filter(e => e.status === "Settled");
+
+  // Group pending by person
+  const owedByPerson = {};
+  pending.forEach(e => {
+    const p = e.paidBy || "Unknown";
+    owedByPerson[p] = owedByPerson[p] || { count:0, amount:0, items:[] };
+    owedByPerson[p].count++;
+    owedByPerson[p].amount += +e.amount||0;
+    owedByPerson[p].items.push(e);
+  });
+
+  const totalPending = pending.reduce((s,e)=>s+(+e.amount||0),0);
+
+  // Lifetime stats per person
+  const lifetimeByPerson = {};
+  state.expenses.forEach(e => {
+    const p = e.paidBy || "Unknown";
+    lifetimeByPerson[p] = lifetimeByPerson[p] || { paid:0, settled:0, pending:0 };
+    lifetimeByPerson[p].paid += +e.amount||0;
+    if(e.status === "Settled") lifetimeByPerson[p].settled += +e.amount||0;
+    else lifetimeByPerson[p].pending += +e.amount||0;
+  });
+
+  main.innerHTML = `
+    <div class="page-eyebrow">Owed</div>
+    <h1 class="page-title">Reimbursements</h1>
+    <p class="page-sub">When agency people pay from personal money — track what's owed back</p>
+
+    <div class="grid grid-3" style="margin-bottom:24px">
+      <div class="card stat-card">
+        <p class="card-label">Total Pending</p>
+        <p class="card-value med ${totalPending>0?'warn-c':''}">${fmt(totalPending)}</p>
+        <div class="card-sub"><span>${pending.length} expenses to reimburse</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">People Owed</p>
+        <p class="card-value med">${Object.keys(owedByPerson).length}</p>
+        <div class="card-sub"><span>Currently pending</span></div>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Total Settled</p>
+        <p class="card-value med pos">${fmt(settled.reduce((s,e)=>s+(+e.amount||0),0))}</p>
+        <div class="card-sub"><span>${settled.length} reimbursed historically</span></div>
+      </div>
+    </div>
+
+    ${Object.keys(owedByPerson).length === 0 ? `
+      <div class="card empty">All caught up — no pending reimbursements.</div>
+    ` : Object.entries(owedByPerson).map(([person,v]) => `
+      <div class="section-head">
+        <h2>${escapeHtml(person)}</h2>
+        <span class="section-rule"></span>
+        <span class="section-num">${v.count} item${v.count===1?'':'s'} · ${fmt(v.amount)}</span>
+      </div>
+      <div class="table-wrap" style="margin-bottom:24px">
+        <div class="table-head">
+          <h3>Owed to ${escapeHtml(person)}</h3>
+          <button class="btn" onclick="settleAllForPerson('${escapeHtml(person)}')">Mark All Reimbursed (${fmt(v.amount)})</button>
+        </div>
+        <table><thead><tr>
+          <th>Date</th><th>Vendor</th><th>Sub-Category</th><th>Category</th><th class="num">Amount</th><th></th>
+        </tr></thead><tbody>${v.items.sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(e => `
+          <tr>
+            <td>${fmtDate(e.date)}</td>
+            <td><strong style="font-weight:600">${escapeHtml(e.vendor)}</strong></td>
+            <td>${escapeHtml(e.subCategory||'—')}</td>
+            <td><span class="badge ${catClass(e.category)}">${escapeHtml(e.category)}</span></td>
+            <td class="num">${fmt(e.amount)}</td>
+            <td class="actions"><button class="btn sm" onclick="settleExpense('${e.id}')">Mark Reimbursed</button></td>
+          </tr>`).join("")}
+          <tr class="total-row">
+            <td colspan="4">Total Owed</td>
+            <td class="num">${fmt(v.amount)}</td>
+            <td></td>
+          </tr>
+        </tbody></table>
+      </div>
+    `).join("")}
+
+    <div class="section-head">
+      <h2>Lifetime Summary</h2>
+      <span class="section-rule"></span>
+      <span class="section-num">All time</span>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr>
+        <th>Person</th><th class="num">Total Paid</th><th class="num">Reimbursed</th><th class="num">Still Owed</th>
+      </tr></thead><tbody>${Object.entries(lifetimeByPerson).map(([p,v]) => `
+        <tr>
+          <td><strong style="font-weight:600">${escapeHtml(p)}</strong></td>
+          <td class="num">${fmt(v.paid)}</td>
+          <td class="num pos">${fmt(v.settled)}</td>
+          <td class="num ${v.pending>0?'warn-c':''}">${fmt(v.pending)}</td>
+        </tr>`).join("")}
+      </tbody></table>
+    </div>
+  `;
+}
+
+window.settleExpense = function(id){
+  const e = state.expenses.find(x => x.id === id); if(!e) return;
+  e.status = "Settled";
+  saveState(); render();
+};
+
+window.settleAllForPerson = function(person){
+  if(!confirm(`Mark all pending expenses as reimbursed for ${person}?`)) return;
+  state.expenses.forEach(e => {
+    if(e.paidBy === person && e.status === "Pending") e.status = "Settled";
+  });
+  saveState(); render();
+};
+
+// =====================================================
+// HISTORY
+// =====================================================
+function renderHistory(){
+  const main = document.getElementById("main");
+
+  // Compile per-month stats
+  const months = {};
+  state.expenses.forEach(e => {
+    const k = monthKeyFromISO(e.date); if(!k) return;
+    months[k] = months[k] || { exp:0, inc:0, byCat:{} };
+    months[k].exp += +e.amount||0;
+    months[k].byCat[e.category] = (months[k].byCat[e.category]||0) + (+e.amount||0);
+  });
+  state.income.forEach(i => {
+    const k = monthKeyFromISO(i.date); if(!k) return;
+    months[k] = months[k] || { exp:0, inc:0, byCat:{} };
+    months[k].inc += +i.amount||0;
+  });
+
+  const keys = Object.keys(months).sort();
+
+  if(keys.length === 0){
+    main.innerHTML = `
+      <div class="page-eyebrow">Records</div>
+      <h1 class="page-title">History</h1>
+      <p class="page-sub">Month-over-month trends</p>
+      <div class="card empty">No data yet. Add expenses or income to see trends here.</div>`;
+    return;
+  }
+
+  const stats = keys.map(k => ({ key:k, label:monthLabel(k), ...months[k], net: months[k].inc - months[k].exp }));
+  const maxVal = Math.max(1, ...stats.flatMap(s => [s.exp, s.inc]));
+
+  // Yearly totals
+  const thisYear = new Date().getFullYear();
+  const yearStats = stats.filter(s => s.key.startsWith(String(thisYear)));
+  const yInc = yearStats.reduce((s,x)=>s+x.inc, 0);
+  const yExp = yearStats.reduce((s,x)=>s+x.exp, 0);
+  const yNet = yInc - yExp;
+
+  // Categories used across months
+  const allCats = [...new Set(stats.flatMap(s => Object.keys(s.byCat)))];
+
+  main.innerHTML = `
+    <div class="page-eyebrow">Records · ${thisYear}</div>
+    <h1 class="page-title">History</h1>
+    <p class="page-sub">${keys.length} month${keys.length===1?'':'s'} tracked</p>
+
+    <div class="grid grid-4" style="margin-bottom:32px">
+      <div class="card stat-card">
+        <p class="card-label">${thisYear} · Income</p>
+        <p class="card-value med ${yInc>0?'pos':''}">${fmt(yInc)}</p>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">${thisYear} · Expenses</p>
+        <p class="card-value med">${fmt(yExp)}</p>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">${thisYear} · Profit</p>
+        <p class="card-value med ${yNet>0?'pos':yNet<0?'neg':''}">${fmt(yNet)}</p>
+      </div>
+      <div class="card stat-card">
+        <p class="card-label">Months Tracked</p>
+        <p class="card-value med">${keys.length}</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Monthly Comparison</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="card" style="padding:28px 24px;margin-bottom:32px">
+      <div class="bar-chart">
+        ${stats.map(s => {
+          const incPct = (s.inc/maxVal)*100;
+          const expPct = (s.exp/maxVal)*100;
+          return `
+          <div class="bar-group">
+            <div class="bar-stack">
+              <div class="bar-track"><div class="bar bar-inc" style="height:${incPct}%"></div></div>
+              <div class="bar-track"><div class="bar bar-exp" style="height:${expPct}%"></div></div>
+            </div>
+            <div class="bar-label">${s.label.split(" ")[0].slice(0,3)}<br><span class="bar-year">${s.label.split(" ")[1]||''}</span></div>
+            <div class="bar-net ${s.net>=0?'pos':'neg'}">${s.net>=0?'+':''}${fmt(s.net)}</div>
+          </div>`;
+        }).join("")}
+      </div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:var(--ok)"></span> Income</span>
+        <span><span class="legend-dot" style="background:var(--ink)"></span> Expenses</span>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Detailed Summary</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="table-wrap" style="margin-bottom:32px">
+      <table><thead><tr>
+        <th>Month</th>
+        <th class="num">Income</th>
+        <th class="num">Expenses</th>
+        <th class="num">Profit</th>
+        <th class="num">Margin</th>
+      </tr></thead><tbody>
+      ${stats.slice().reverse().map(s => {
+        const margin = s.inc>0 ? ((s.net/s.inc)*100) : 0;
+        return `<tr>
+          <td><strong style="font-weight:600">${s.label}</strong></td>
+          <td class="num ${s.inc>0?'pos':''}">${fmt(s.inc)}</td>
+          <td class="num">${fmt(s.exp)}</td>
+          <td class="num ${s.net>0?'pos':s.net<0?'neg':''}">${fmt(s.net)}</td>
+          <td class="num ${margin>0?'pos':margin<0?'neg':''}">${margin.toFixed(1)}%</td>
+        </tr>`;
+      }).join("")}
+      </tbody></table>
+    </div>
+
+    ${allCats.length > 0 ? `
+    <div class="section-head">
+      <h2>Spending by Category</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="table-wrap" style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th>Category</th>
+          ${stats.map(s => `<th class="num">${s.label.split(" ")[0].slice(0,3)} ${(s.label.split(" ")[1]||'').slice(2)}</th>`).join("")}
+          <th class="num">Total</th>
+        </tr></thead>
+        <tbody>
+        ${allCats.map(cat => {
+          const total = stats.reduce((sum,s)=>sum+(s.byCat[cat]||0),0);
+          return `<tr>
+            <td><span class="badge ${catClass(cat)}">${escapeHtml(cat)}</span></td>
+            ${stats.map(s => `<td class="num">${s.byCat[cat] ? fmt(s.byCat[cat]) : '—'}</td>`).join("")}
+            <td class="num" style="font-weight:600">${fmt(total)}</td>
+          </tr>`;
+        }).join("")}
+        </tbody>
+      </table>
+    </div>` : ''}
+  `;
+}
+
+// =====================================================
+// SETTINGS
+// =====================================================
+function renderSettings(){
+  const main = document.getElementById("main");
+  main.innerHTML = `
+    <div class="page-eyebrow">Configuration</div>
+    <h1 class="page-title">Settings</h1>
+    <p class="page-sub">Customize, backup, or manage</p>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="margin:0 0 16px;font-family:var(--serif);font-size:20px;font-weight:500">Currency</h3>
+      <div class="form-row">
+        <label>Symbol<input value="${state.currency}" id="cur_sym" maxlength="3" /></label>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" onclick="saveCurrency()">Save</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="margin:0 0 16px;font-family:var(--serif);font-size:20px;font-weight:500">Team / People</h3>
+      <p style="color:var(--ink-2);font-size:13.5px;margin:0 0 14px">
+        People who can pay agency expenses (used in "Paid By" dropdown).
+      </p>
+      <div class="row" style="margin-bottom:14px;flex-wrap:wrap">
+        ${state.people.map(p => `<span class="badge" style="font-size:13px;padding:6px 12px">${escapeHtml(p)} <button onclick="removePerson('${escapeHtml(p)}')" style="margin-left:6px;color:var(--bad);background:transparent;border:0;cursor:pointer">×</button></span>`).join("")}
+      </div>
+      <div class="row">
+        <input id="new_person" placeholder="Add person name" style="max-width:240px" />
+        <button class="btn" onclick="addPerson()">Add</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="margin:0 0 8px;font-family:var(--serif);font-size:20px;font-weight:500">Backup &amp; Restore</h3>
+      <p style="color:var(--ink-2);font-size:13.5px;margin:0 0 16px">
+        Your data lives in this browser only. Export periodically to keep a backup.
+      </p>
+      <div class="row">
+        <button class="btn" onclick="exportData()">Export JSON</button>
+        <button class="btn ghost" onclick="document.getElementById('importFile').click()">Import JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)" />
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 16px;font-family:var(--serif);font-size:20px;font-weight:500;color:var(--bad)">Danger Zone</h3>
+      <button class="btn danger" onclick="resetAll()">Reset Everything</button>
+    </div>
+  `;
+}
+
+window.saveCurrency = function(){
+  state.currency = document.getElementById("cur_sym").value || "₹";
+  saveState(); render();
+};
+
+window.addPerson = function(){
+  const name = document.getElementById("new_person").value.trim();
+  if(!name) return;
+  if(state.people.includes(name)){ alert("Already exists."); return; }
+  state.people.push(name);
+  saveState(); render();
+};
+
+window.removePerson = function(name){
+  if(state.people.length <= 1){ alert("You need at least one person."); return; }
+  if(!confirm(`Remove ${name}? Existing expenses keep their value but no new ones can be tagged to ${name}.`)) return;
+  state.people = state.people.filter(p => p !== name);
+  saveState(); render();
+};
+
+window.exportData = function(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `finiance-pfa-${todayISO()}.json`;
+  a.click(); URL.revokeObjectURL(url);
+};
+
+window.importData = function(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(!confirm("This will replace all your current data. Continue?")) return;
+      state = data; saveState(); render();
+      alert("Imported successfully.");
+    }catch(err){ alert("Invalid file."); }
+  };
+  reader.readAsText(file);
+};
+
+window.resetAll = function(){
+  if(!confirm("Delete ALL data and reset? This cannot be undone.")) return;
+  if(!confirm("Are you really sure? Export a backup first if needed.")) return;
+  localStorage.removeItem(STORE_KEY);
+  state = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  saveState(); render();
+};
+
+render();
+</script>
+</body>
+</html>
